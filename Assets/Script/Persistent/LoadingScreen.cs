@@ -55,17 +55,17 @@ namespace YARG
             }
 
             // Auto connect profiles, using the same order that they were previously connected.
-            if (SettingsManager.Settings.ReconnectProfiles.Value)
-            {
-                PlayerContainer.AutoConnectProfiles();
-            }
-            else
-            {
-                PlayerContainer.ClearProfileOrder();
-            }
+            //if (SettingsManager.Settings.ReconnectProfiles.Value) TODO for input
+            //{
+            //    PlayerContainer.AutoConnectProfiles();
+            //}
+            //else
+            //{
+            //    PlayerContainer.ClearProfileOrder();
+            //}
 
             // Fast scan (cache read) on startup
-            await SongContainer.RunRefresh(true, context);
+            //await SongContainer.RunRefresh(true, context); TODO scan on startup
         }
     }
 

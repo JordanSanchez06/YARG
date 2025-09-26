@@ -81,6 +81,7 @@ namespace YARG.Settings
                 nameof(Settings.PlayAShowTimeout),
                 nameof(Settings.RequireAllDifficulties),
             },
+
             new MetadataTab("Sound", icon: "Sound")
             {
                 new HeaderMetadata("Volume"),
@@ -240,19 +241,19 @@ namespace YARG.Settings
 
         public static void LoadSettings()
         {
-            // Create settings container
-            try
-            {
-                string text = File.ReadAllText(SettingsFile);
-                Settings = JsonConvert.DeserializeObject<SettingContainer>(text, JsonSettings);
-            }
-            catch (Exception e)
-            {
-                YargLogger.LogException(e, "Failed to load settings!");
-            }
+            // Create settings container TODO
+            //try
+            //{ 
+            //    string text = File.ReadAllText(SettingsFile);
+            //    Settings = JsonConvert.DeserializeObject<SettingContainer>(text, JsonSettings);
+            //}
+            //catch (Exception e)
+            //{
+            //    YargLogger.LogException(e, "Failed to load settings!");
+            //}
 
             // If null, recreate
-            //Settings ??= new SettingContainer(); TODO
+            Settings ??= new SettingContainer();
             if (!SettingContainer.IsInitialized && SystemInfo.supportsComputeShaders && SystemInfo.supportsMotionVectors && false)
             {
                 Settings.VenueAntiAliasing.Add(

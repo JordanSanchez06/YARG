@@ -36,7 +36,9 @@ namespace YARG.Settings
 
             #region Hidden Settings
 
-            public List<string> SongFolders = new();
+            public List<string> SongFolders = new() {
+                Application.streamingAssetsPath
+            };
 
             public bool ShowAntiPiracyDialog = true;
             public bool ShowEngineInconsistencyDialog = true;
@@ -136,8 +138,7 @@ namespace YARG.Settings
 
             #endregion
 
-            #region Sound
-
+#region Sound
             public VolumeSetting MasterMusicVolume { get; } = new(0.75f, v => GlobalAudioHandler.SetMasterVolume(v));
 
             public VolumeSetting GuitarVolume { get; } =
@@ -212,10 +213,10 @@ namespace YARG.Settings
             public ToggleSetting ApplyVolumesInMusicLibrary { get; } = new(true);
 
             public ToggleSetting EnableVoxSamples { get; } = new(true);
+            
+#endregion
 
-            #endregion
-
-            #region Graphics
+#region Graphics
 
             public ToggleSetting VSync { get; } = new(true, VSyncCallback);
             public IntSetting FpsCap { get; } = new(60, 0, onChange: FpsCapCallback);
@@ -318,9 +319,9 @@ namespace YARG.Settings
 
             public ToggleSetting KeepSongInfoVisible { get; } = new(false);
 
-            #endregion
+#endregion
 
-            #region File Management
+#region File Management
 
             public void ExportSongsOuvert()
             {
@@ -352,10 +353,10 @@ namespace YARG.Settings
                 FileExplorerHelper.OpenFolder(PathHelper.ExecutablePath);
             }
 
-            #endregion
+#endregion
 
-            #region Lighting Peripherals
-            #if UNITY_STANDALONE //to disable lighting
+#region Lighting Peripherals
+#if UNITY_STANDALONE //to disable lighting
             public ToggleSetting StageKitEnabled  { get; } = new(true, StageKitEnabledCallback);
             public ToggleSetting DMXEnabled       { get; } = new(false, DMXEnabledCallback);
             public ToggleSetting RB3EEnabled      { get; } = new(false, RB3EEnabledCallback);
@@ -415,10 +416,10 @@ namespace YARG.Settings
             public IntSetting DMXUniverseChannel { get; } = new(1, 1, 65535);
 
             public DMXChannelsSetting DMXDimmerValues { get; } = new(new[] { 255, 255, 255, 255, 255, 255, 255, 255 });
-            #endif
-            #endregion
+#endif
+#endregion
 
-            #region Debug and Developer
+#region Debug and Developer
 
             public ToggleSetting InputDeviceLogging { get; } = new(false, InputDeviceLoggingCallback);
 
@@ -521,12 +522,12 @@ namespace YARG.Settings
                 }
                 StageKitHardware.Instance.HandleEnabledChanged(value);
             }
-            #if UNITY_STANDALONE
+#if UNITY_STANDALONE
             private static void DMXEnabledCallback(bool value)
             {
                 SacnHardware.Instance.HandleEnabledChanged(value);
             }
-            #endif
+#endif
             private static void VSyncCallback(bool value)
             {
                 QualitySettings.vSyncCount = value ? 1 : 0;
