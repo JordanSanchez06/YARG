@@ -355,6 +355,7 @@ namespace YARG.Settings
             #endregion
 
             #region Lighting Peripherals
+            #if UNITY_STANDALONE //to disable lighting
             public ToggleSetting StageKitEnabled  { get; } = new(true, StageKitEnabledCallback);
             public ToggleSetting DMXEnabled       { get; } = new(false, DMXEnabledCallback);
             public ToggleSetting RB3EEnabled      { get; } = new(false, RB3EEnabledCallback);
@@ -414,7 +415,7 @@ namespace YARG.Settings
             public IntSetting DMXUniverseChannel { get; } = new(1, 1, 65535);
 
             public DMXChannelsSetting DMXDimmerValues { get; } = new(new[] { 255, 255, 255, 255, 255, 255, 255, 255 });
-
+            #endif
             #endregion
 
             #region Debug and Developer
@@ -443,9 +444,9 @@ namespace YARG.Settings
                 // LogLevel.Failure,
             };
 
-            #endregion
+#endregion
 
-            #region Experimental
+#region Experimental
 
             public ToggleSetting DataStreamEnable { get; } = new(false, DataStreamEnableCallback );
             public DropdownSetting<BandComboType> BandComboTypeSetting { get; } = new(BandComboType.Off)
@@ -455,9 +456,9 @@ namespace YARG.Settings
                 BandComboType.Strict
             };
 
-            #endregion
+#endregion
 
-            #region Callbacks
+#region Callbacks
 
             private static void SetLogLevelCallback(LogLevel level)
             {
@@ -520,12 +521,12 @@ namespace YARG.Settings
                 }
                 StageKitHardware.Instance.HandleEnabledChanged(value);
             }
-
+            #if UNITY_STANDALONE
             private static void DMXEnabledCallback(bool value)
             {
                 SacnHardware.Instance.HandleEnabledChanged(value);
             }
-
+            #endif
             private static void VSyncCallback(bool value)
             {
                 QualitySettings.vSyncCount = value ? 1 : 0;
@@ -641,7 +642,7 @@ namespace YARG.Settings
                         item2: device.description.ToJson());
                 }
             }
-            #endregion
+#endregion
         }
     }
 }

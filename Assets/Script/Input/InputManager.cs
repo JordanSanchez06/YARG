@@ -60,39 +60,39 @@ namespace YARG.Input
 
         public static void Initialize()
         {
-            InputSystem.pollingFrequency = SettingsManager.Settings.InputPollingFrequency.Value;
+            //InputSystem.pollingFrequency = SettingsManager.Settings.InputPollingFrequency.Value;
 
-            InputSystem.onEvent += OnEvent;
+            //InputSystem.onEvent += OnEvent;
 
-            InputSystem.onBeforeUpdate += OnBeforeUpdate;
-            InputSystem.onAfterUpdate += OnAfterUpdate;
+            //InputSystem.onBeforeUpdate += OnBeforeUpdate;
+            //InputSystem.onAfterUpdate += OnAfterUpdate;
 
-            _gameFocused = Application.isFocused;
-            Application.focusChanged += OnFocusChange;
-            InputSystem.onDeviceChange += OnDeviceChange;
+            //_gameFocused = Application.isFocused;
+            //Application.focusChanged += OnFocusChange;
+            //InputSystem.onDeviceChange += OnDeviceChange;
 
-            // Notify of all current devices
-            ToastManager.ToastInformation("Devices found: " + (Microphone.devices.Length + InputSystem.devices.Count));
-            foreach (var device in InputSystem.devices)
-            {
-                if (!device.enabled)
-                {
-                    _disabledDevices.Add(device);
-                    continue;
-                }
+            //// Notify of all current devices
+            //ToastManager.ToastInformation("Devices found: " + (Microphone.devices.Length + InputSystem.devices.Count));
+            //foreach (var device in InputSystem.devices)
+            //{
+            //    if (!device.enabled)
+            //    {
+            //        _disabledDevices.Add(device);
+            //        continue;
+            //    }
 
-                DeviceAdded?.Invoke(device);
-            }
+            //    DeviceAdded?.Invoke(device);
+            //}
 
-            // Register formatter for device descriptions, we want them to output as JSON in logs
-            Utf16ValueStringBuilder.RegisterTryFormat(
-                (InputDeviceDescription value, Span<char> destination, out int charsWritten, ReadOnlySpan<char> format) =>
-                {
-                    string json = value.ToJson();
-                    charsWritten = json.Length;
-                    return json.AsSpan().TryCopyTo(destination);
-                }
-            );
+            //// Register formatter for device descriptions, we want them to output as JSON in logs
+            //Utf16ValueStringBuilder.RegisterTryFormat(
+            //    (InputDeviceDescription value, Span<char> destination, out int charsWritten, ReadOnlySpan<char> format) =>
+            //    {
+            //        string json = value.ToJson();
+            //        charsWritten = json.Length;
+            //        return json.AsSpan().TryCopyTo(destination);
+            //    }
+            //);
         }
 
         public static void Destroy()

@@ -179,6 +179,7 @@ namespace YARG.Settings
                 new ButtonRowMetadata(nameof(Settings.OpenPersistentDataPath)),
                 new ButtonRowMetadata(nameof(Settings.OpenExecutablePath)),
             },
+            #if UNITY_STANDALONE //to disable lighting
             new MetadataTab("LightingPeripherals", icon: "Lighting", new DMXInformationPanelBuilder())
             {
                 new HeaderMetadata("LightingGeneral"),
@@ -212,6 +213,7 @@ namespace YARG.Settings
                 nameof(Settings.RB3EBroadcastIP),
 
             },
+            #endif
             new MetadataTab("Debug", icon: "Debug")
             {
                 nameof(Settings.InputDeviceLogging),
@@ -250,28 +252,28 @@ namespace YARG.Settings
             }
 
             // If null, recreate
-            Settings ??= new SettingContainer();
-            if (!SettingContainer.IsInitialized && SystemInfo.supportsComputeShaders && SystemInfo.supportsMotionVectors)
+            //Settings ??= new SettingContainer(); TODO
+            if (!SettingContainer.IsInitialized && SystemInfo.supportsComputeShaders && SystemInfo.supportsMotionVectors && false)
             {
                 Settings.VenueAntiAliasing.Add(
                      YARG.VenueAntiAliasingMethod.FSR3
                 );
             }
-            SettingContainer.IsInitialized = true;
+            //SettingContainer.IsInitialized = true;
 
-            // Now that we're done loading, call all of the callbacks
-            var fields = typeof(SettingContainer).GetProperties();
-            foreach (var field in fields)
-            {
-                var value = field.GetValue(Settings);
+            //// Now that we're done loading, call all of the callbacks
+            //var fields = typeof(SettingContainer).GetProperties();
+            //foreach (var field in fields)
+            //{
+            //    var value = field.GetValue(Settings);
 
-                if (value is not ISettingType settingType)
-                {
-                    continue;
-                }
+            //    if (value is not ISettingType settingType)
+            //    {
+            //        continue;
+            //    }
 
-                settingType.ForceInvokeCallback();
-            }
+            //    settingType.ForceInvokeCallback();
+            //}
         }
 
         public static void SaveSettings()

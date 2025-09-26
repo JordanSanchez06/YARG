@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Rendering.VirtualTexturing;
+//using UnityEngine.Rendering.VirtualTexturing; compilation error
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using YARG.Core.Engine;

@@ -183,11 +183,15 @@ namespace YARG.Integration.Sacn
             //Got to turn those on.
             for (int i = 0; i < 8; i++)
             {
+                #if UNITY_STANDALONE //disable lighting
                 SetChannel(DimmerChannels[i], (byte)SettingsManager.Settings.DMXDimmerValues.Value[i]);
+                #endif
             }
 
+            #if UNITY_STANDALONE
             //Since the master controller comes up first, we miss its events until now.
             OnLightingEvent(MasterLightingController.CurrentLightingCue);
+            #endif
 
         }
 
