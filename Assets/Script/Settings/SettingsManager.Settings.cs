@@ -36,7 +36,9 @@ namespace YARG.Settings
 
             #region Hidden Settings
 
-            public List<string> SongFolders = new();
+            public List<string> SongFolders = new() {
+                Application.streamingAssetsPath
+            };
 
             public bool ShowAntiPiracyDialog = true;
             public bool ShowEngineInconsistencyDialog = true;
@@ -354,6 +356,7 @@ namespace YARG.Settings
 
             #endregion
 
+            #if UNITY_STANDALONE
             #region Lighting Peripherals
             public ToggleSetting StageKitEnabled  { get; } = new(true, StageKitEnabledCallback);
             public ToggleSetting DMXEnabled       { get; } = new(false, DMXEnabledCallback);
@@ -416,6 +419,7 @@ namespace YARG.Settings
             public DMXChannelsSetting DMXDimmerValues { get; } = new(new[] { 255, 255, 255, 255, 255, 255, 255, 255 });
 
             #endregion
+            #endif
 
             #region Debug and Developer
 
@@ -520,11 +524,12 @@ namespace YARG.Settings
                 }
                 StageKitHardware.Instance.HandleEnabledChanged(value);
             }
-
+            #if UNITY_STANDALONE
             private static void DMXEnabledCallback(bool value)
             {
                 SacnHardware.Instance.HandleEnabledChanged(value);
             }
+            #endif
 
             private static void VSyncCallback(bool value)
             {

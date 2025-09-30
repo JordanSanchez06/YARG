@@ -10,6 +10,7 @@ namespace YARG.Integration.Sacn
 {
     public class SacnHardware : MonoSingleton<SacnHardware>
     {
+#if UNITY_STANDALONE
         // DMX spec says 44 updates per second is the max
         private const float TARGET_FPS = 44f;
         private const float TIME_BETWEEN_CALLS = 1f / TARGET_FPS;
@@ -160,5 +161,6 @@ namespace YARG.Integration.Sacn
             _dataPacket[SettingsManager.Settings.DMXBeatlineChannel.Value - 1] = 0;
 
         }
+#endif
     }
 }

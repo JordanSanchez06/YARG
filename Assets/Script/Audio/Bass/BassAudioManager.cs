@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ManagedBass;
-using ManagedBass.Fx;
-using ManagedBass.Mix;
 using UnityEngine;
 using YARG.Core.Audio;
 using YARG.Core.Logging;
 using YARG.Settings;
+#if (UNITY_IOS || UNITY_STANDALONE_OSX) && !UNITY_EDITOR
+// For IL2CPP platforms, use wrapper AND import ManagedBass types
+using Bass = YARG.Audio.BASS.Bass;
+using ManagedBass;           // Still needed for enums like BassFlags, DeviceInitFlags, etc.
+using ManagedBass.Fx;
+using ManagedBass.Mix;
+#else
+// For other platforms (including Editor), use ManagedBass directly
+using ManagedBass;
+using ManagedBass.Fx;
+using ManagedBass.Mix;
+#endif
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -159,7 +168,9 @@ namespace YARG.Audio.BASS
             YargLogger.LogFormatInfo("BASS: {0} - BASS.FX: {1} - BASS.Mix: {2}", Bass.Version, BassFx.Version, BassMix.Version);
             YargLogger.LogFormatInfo("Update Period: {0}ms. Device Buffer Length: {1}ms. Playback Buffer Length: {2}ms. Device Playback Latency: {3}ms",
                 Bass.UpdatePeriod, Bass.DeviceBufferLength, Bass.PlaybackBufferLength, PlaybackLatency);
+            #if !UNITY_IOS
             YargLogger.LogFormatInfo("Current Device: {0}", Bass.GetDeviceInfo(Bass.CurrentDevice).Name);
+            #endif
         }
 
 #nullable enable

@@ -46,6 +46,7 @@ namespace YARG
             }
 
             // Load Discord right after (this requires localization)
+            #if UNITY_STANDALONE
             try
             {
                 DiscordController.Instance.Initialize();
@@ -54,6 +55,7 @@ namespace YARG
             {
                 YargLogger.LogException(e);
             }
+            #endif
 
             // Load song sources and icons
             try
@@ -76,7 +78,7 @@ namespace YARG
             }
 
             // Fast scan (cache read) on startup
-            await SongContainer.RunRefresh(true, context);
+            //await SongContainer.RunRefresh(true, context); TODO
         }
 
         private void Quit()

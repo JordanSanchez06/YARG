@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414738, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0.12729046, g: 0.13414232, b: 0.12114291, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3566,7 +3566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1617137645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3603,23 +3603,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e0fb070e46d59947a7b18b7f97747e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DimmerChannels: 
-  RedChannels: 
-  GreenChannels: 
-  BlueChannels: 
-  YellowChannels: 
-  FogChannels: 
-  StrobeChannels: 
-  CueChangeChannel: 0
-  KeyframeChannel: 0
-  BeatlineChannel: 0
-  BonusEffectChannel: 0
-  PostProcessingChannel: 0
-  PerformerChannel: 0
-  DrumChannel: 0
-  GuitarChannel: 0
-  BassChannel: 0
-  KeysChannel: 0
 --- !u!114 &1617137648
 MonoBehaviour:
   m_ObjectHideFlags: 0
