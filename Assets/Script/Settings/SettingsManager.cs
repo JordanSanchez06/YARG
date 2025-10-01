@@ -271,9 +271,6 @@ namespace YARG.Settings
                 {
                     continue;
                 }
-                UnityEngine.Debug.LogError($"fortnite callback field: {field.Name}");
-                UnityEngine.Debug.LogError($"fortnite callback value: {value}");
-
                 settingType.ForceInvokeCallback();
             }
         }

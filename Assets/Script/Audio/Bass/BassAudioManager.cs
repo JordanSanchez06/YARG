@@ -5,18 +5,10 @@ using UnityEngine;
 using YARG.Core.Audio;
 using YARG.Core.Logging;
 using YARG.Settings;
-#if (UNITY_IOS || UNITY_STANDALONE_OSX) && !UNITY_EDITOR
-// For IL2CPP platforms, use wrapper AND import ManagedBass types
-using Bass = YARG.Audio.BASS.Bass;
-using ManagedBass;           // Still needed for enums like BassFlags, DeviceInitFlags, etc.
-using ManagedBass.Fx;
-using ManagedBass.Mix;
-#else
-// For other platforms (including Editor), use ManagedBass directly
 using ManagedBass;
 using ManagedBass.Fx;
 using ManagedBass.Mix;
-#endif
+using System.Runtime.InteropServices;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -131,10 +123,12 @@ namespace YARG.Audio.BASS
             Bass.DeviceBufferLength = 2 * devPeriod;
 
             // Affects Windows only. Forces device names to be in UTF-8 on Windows rather than ANSI.
+#if UNITY_STANDALONE_WIN
             Bass.UnicodeDeviceInformation = true;
             Bass.FloatingPointDSP = true;
             Bass.VistaTruePlayPosition = false;
             Bass.UpdateThreads = GlobalAudioHandler.MAX_THREADS;
+#endif
 
             // Undocumented BASS_CONFIG_MP3_OLDGAPS config.
             Bass.Configure((Configuration) 68, 1);
@@ -168,9 +162,9 @@ namespace YARG.Audio.BASS
             YargLogger.LogFormatInfo("BASS: {0} - BASS.FX: {1} - BASS.Mix: {2}", Bass.Version, BassFx.Version, BassMix.Version);
             YargLogger.LogFormatInfo("Update Period: {0}ms. Device Buffer Length: {1}ms. Playback Buffer Length: {2}ms. Device Playback Latency: {3}ms",
                 Bass.UpdatePeriod, Bass.DeviceBufferLength, Bass.PlaybackBufferLength, PlaybackLatency);
-            #if !UNITY_IOS
+#if !UNITY_IOS
             YargLogger.LogFormatInfo("Current Device: {0}", Bass.GetDeviceInfo(Bass.CurrentDevice).Name);
-            #endif
+#endif
         }
 
 #nullable enable
@@ -418,6 +412,25 @@ namespace YARG.Audio.BASS
 
         internal static bool CreateSourceStream(Stream stream, out int streamHandle)
         {
+#if UNITY_IOS
+
+            const BassFlags streamFlags = BassFlags.Prescan | BassFlags.Decode | BassFlags.AsyncFile | (BassFlags) 64;
+
+            // Correctly create a handle and pass its pointer to BASS
+            var procs = new BassStreamProcedures(stream);
+            var handle = GCHandle.Alloc(procs);
+
+            streamHandle = Bass.CreateStream(StreamSystem.NoBuffer, streamFlags, procs, GCHandle.ToIntPtr(handle));
+
+            if (streamHandle == 0)
+            {
+                YargLogger.LogFormatError("Failed to create source stream: {0}!", Bass.LastError);
+                handle.Free(); // Free the handle if the stream creation fails
+                return false;
+            }
+            return true;
+
+#else
             // Last flag is new BASS_SAMPLE_NOREORDER flag, which is not in the BassFlags enum,
             // as it was made as part of an update to fix <= 8 channel oggs.
             // https://www.un4seen.com/forum/?topic=20148.msg140872#msg140872
@@ -430,6 +443,7 @@ namespace YARG.Audio.BASS
                 return false;
             }
             return true;
+#endif
         }
 
         internal static bool GetSpeed(int streamHandle, out float speed)

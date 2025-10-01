@@ -103,7 +103,6 @@ namespace YARG
         {
             SettingsManager.LoadSettings();
             InputManager.Initialize();
-
             LoadScene(SceneIndex.Menu);
         }
 

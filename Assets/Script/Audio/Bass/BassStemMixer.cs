@@ -6,6 +6,8 @@ using ManagedBass.Mix;
 using YARG.Core.Audio;
 using YARG.Core.Logging;
 using YARG.Core.Song;
+using AOT; //add for ios
+using System.Runtime.InteropServices; //add for ios
 
 namespace YARG.Audio.BASS
 {
@@ -18,8 +20,43 @@ namespace YARG.Audio.BASS
         private int _songEndHandle;
         private float _speed;
 
+        private GCHandle _gcHandle;
+
+#if UNITY_IOS
+        [MonoPInvokeCallback(typeof(SyncProcedure))]
+        private static void SongEndCallback(int handle, int channel, int data, IntPtr user)
+        {
+            // Get the C# object back from the handle
+            var gcHandle = GCHandle.FromIntPtr(user);
+            if (gcHandle.Target is BassStemMixer mixer)
+            {
+                // Invoke the C# event on the main thread
+                UnityMainThreadCallback.QueueEvent(() => mixer._songEnd?.Invoke());
+            }
+        }
+#endif
+
         public override event Action SongEnd
         {
+#if UNITY_IOS
+            add
+            {
+                // This logic is now updated to use the static callback
+                if (_songEndHandle == 0)
+                {
+                    // Create a handle to this object and pass its pointer to BASS
+                    _gcHandle = GCHandle.Alloc(this);
+                    _songEndHandle = BassMix.ChannelSetSync(_mainHandle.Stream, SyncFlags.End, 0, SongEndCallback, GCHandle.ToIntPtr(_gcHandle));
+                }
+
+                _songEnd += value;
+            }
+            remove
+            {
+                _songEnd -= value;
+            }
+#else
+
             add
             {
                 if (_songEndHandle == 0)
@@ -42,6 +79,7 @@ namespace YARG.Audio.BASS
             {
                 _songEnd -= value;
             }
+#endif
         }
 
         internal BassStemMixer(string name, BassAudioManager manager, float speed, double volume, int handle, bool clampStemVolume)
@@ -316,6 +354,19 @@ namespace YARG.Audio.BASS
 
         protected override void DisposeUnmanagedResources()
         {
+#if UNITY_IOS
+            // Free the GCHandle when the mixer is disposed
+            if (_gcHandle.IsAllocated)
+            {
+                _gcHandle.Free();
+            }
+
+            // ... (the rest of the original method is here) ...
+            if (_mixerHandle != 0)
+            {
+                // ...
+            }
+#else
             if (_mixerHandle != 0)
             {
                 if (!Bass.StreamFree(_mixerHandle))
@@ -323,6 +374,7 @@ namespace YARG.Audio.BASS
                     YargLogger.LogFormatError("Failed to free mixer stream (THIS WILL LEAK MEMORY!): {0}!", Bass.LastError);
                 }
             }
+#endif
         }
 
         private void CreateChannel(SongStem stem, int sourceHandle, StreamHandle streamHandles, StreamHandle reverbHandles)
