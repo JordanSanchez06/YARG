@@ -38,7 +38,9 @@ namespace YARG.Settings
             #region Hidden Settings
 
             public List<string> SongFolders = new() {
+#if UNITY_IPHONE
                 Application.streamingAssetsPath
+#endif
             };
 
             public bool ShowAntiPiracyDialog = true;
