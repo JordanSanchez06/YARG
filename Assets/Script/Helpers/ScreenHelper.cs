@@ -53,6 +53,15 @@ namespace YARG.Helpers
         /// </summary>
         public static Resolution GetScreenResolution()
         {
+            #if (UNITY_IOS || UNITY_ANDROID) && !UNITY_EDITOR
+            // On mobile platforms, use the current screen resolution
+            return new Resolution()
+            {
+                width = Screen.width,
+                height = Screen.height,
+                refreshRate = Screen.currentResolution.refreshRate,
+            };
+            #else
             var screenInfo = Screen.mainWindowDisplayInfo;
             return new Resolution()
             {
@@ -60,7 +69,9 @@ namespace YARG.Helpers
                 height = screenInfo.height,
                 refreshRate = (int) Math.Round(screenInfo.refreshRate.value),
             };
+            #endif
         }
+
 
         /// <summary>
         /// Sets the fullscreen resolution to that of the current screen.

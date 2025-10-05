@@ -17,6 +17,7 @@ namespace YARG.Menu.Main
 
         private void Update()
         {
+#if UNITY_STANDALONE
             // Move the camera container down
             _cameraContainer.transform.position = Vector3.Lerp(_cameraContainer.transform.position,
                 new Vector3(0, 0.5f, 0), Time.deltaTime * 1.5f);
@@ -35,6 +36,7 @@ namespace YARG.Menu.Main
             transformCache.localPosition = initialPos
                 .WithX(Mathf.Lerp(initialPos.x, mousePos.x / 4f, Time.deltaTime * 8f))
                 .WithY(Mathf.Lerp(initialPos.y, mousePos.y / 3f - 0.25f, Time.deltaTime * 8f));
+#endif
         }
     }
 }

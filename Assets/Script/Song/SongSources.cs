@@ -116,7 +116,9 @@ namespace YARG.Song
         }
 
         public const string SOURCE_REPO_FOLDER = "OpenSource-master";
-#if UNITY_EDITOR
+#if UNITY_IOS
+        public static readonly string SourcesFolder = Path.Combine(Application.persistentDataPath, "sources");
+#elif UNITY_EDITOR
         // The editor does not track the contents of folders that end in ~,
         // so use this to prevent Unity from stalling due to importing freshly-downloaded sources
         public static readonly string SourcesFolder = Path.Combine(PathHelper.StreamingAssetsPath, "sources~");

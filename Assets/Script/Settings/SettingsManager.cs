@@ -179,6 +179,7 @@ namespace YARG.Settings
                 new ButtonRowMetadata(nameof(Settings.OpenPersistentDataPath)),
                 new ButtonRowMetadata(nameof(Settings.OpenExecutablePath)),
             },
+            #if UNITY_STANDALONE
             new MetadataTab("LightingPeripherals", icon: "Lighting", new DMXInformationPanelBuilder())
             {
                 new HeaderMetadata("LightingGeneral"),
@@ -212,6 +213,7 @@ namespace YARG.Settings
                 nameof(Settings.RB3EBroadcastIP),
 
             },
+            #endif
             new MetadataTab("Debug", icon: "Debug")
             {
                 nameof(Settings.InputDeviceLogging),
@@ -269,7 +271,6 @@ namespace YARG.Settings
                 {
                     continue;
                 }
-
                 settingType.ForceInvokeCallback();
             }
         }

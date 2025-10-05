@@ -2,6 +2,7 @@
 using YARG.Core.Song.Cache;
 using YARG.Core.Song;
 using System;
+using System.IO;
 using System.Linq;
 using YARG.Helpers.Extensions;
 using YARG.Settings;
@@ -124,21 +125,35 @@ namespace YARG.Song
 #nullable disable
         {
             var directories = new List<string>(SettingsManager.Settings.SongFolders);
-            string setlistPath = PathHelper.SetlistPath;
-            if (!string.IsNullOrEmpty(setlistPath) && !directories.Contains(setlistPath))
-            {
-                directories.Add(setlistPath);
-            }
+    string setlistPath = PathHelper.SetlistPath;
+    if (!string.IsNullOrEmpty(setlistPath) && !directories.Contains(setlistPath))
+    {
+        directories.Add(setlistPath);
+    }
 
-            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-            var task = UniTask.RunOnThreadPool(() =>
-            {
-                _songCache = CacheHandler.RunScan(quick,
-                    PathHelper.SongCachePath,
-                    PathHelper.BadSongsPath,
-                    SettingsManager.Settings.UseFullDirectoryForPlaylists.Value,
-                    directories);
-            });
+    // Platform-specific adjustments for iOS
+#if UNITY_IOS
+    string persistentSongsPath = Path.Combine(UnityEngine.Application.streamingAssetsPath, "songs");
+    directories = new List<string> { persistentSongsPath };
+
+    string cacheLocation = Path.Combine(UnityEngine.Application.persistentDataPath, "cache");
+    string badSongsLocation = Path.Combine(UnityEngine.Application.persistentDataPath, "badSongs");
+#else
+    string cacheLocation = PathHelper.SongCachePath;
+    string badSongsLocation = PathHelper.BadSongsPath;
+#endif
+
+    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+    var task = UniTask.RunOnThreadPool(() =>
+    {
+        _songCache = CacheHandler.RunScan(
+            quick,
+            cacheLocation,
+            badSongsLocation,
+            SettingsManager.Settings.UseFullDirectoryForPlaylists.Value,
+            directories);
+    });
 
             while (task.Status == UniTaskStatus.Pending)
             {
@@ -153,7 +168,9 @@ namespace YARG.Song
 
             YargLogger.LogFormatInfo("Scan time: {0}s", stopwatch.Elapsed.TotalSeconds);
             MusicLibraryMenu.SetReload(MusicLibraryReloadState.Full);
+#if !UNITY_IOS //TODO
             SongSources.LoadSprites(context);
+#endif
         }
 
         public static SongCategory[] GetSortedCategory(SortAttribute sort)
