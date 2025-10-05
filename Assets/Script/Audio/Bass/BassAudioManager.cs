@@ -103,9 +103,10 @@ namespace YARG.Audio.BASS
             string bassPath = GetBassDirectory();
             string opusLibDirectory = Path.Combine(bassPath, "bassopus");
 
+#if !UNITY_IPHONE && !UNITY_EDITOR
             _opusHandle = Bass.PluginLoad(opusLibDirectory);
             if (_opusHandle == 0) YargLogger.LogFormatError("Failed to load .opus plugin: {0}!", Bass.LastError);
-
+#endif
             Bass.Configure(Configuration.IncludeDefaultDevice, true);
 
             Bass.UpdatePeriod = 5;
