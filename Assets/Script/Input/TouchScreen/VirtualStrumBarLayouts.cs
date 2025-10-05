@@ -27,8 +27,8 @@ public struct VirtualTouchpadState : IInputStateTypeInfo
     public int buttons;
 }
 
-[InputControlLayout(stateType = typeof(VirtualTouchpadState), displayName = "On-Screen Buttons")]
-public class VirtualTouchpadDevice : InputDevice
+[InputControlLayout(stateType = typeof(VirtualTouchpadState), displayName = "On-Screen Strum Buttons")]
+public class VirtualStrumButtons : InputDevice
 {
     public ButtonControl LeftTap { get; private set; }
     public ButtonControl LeftRelease { get; private set; }
