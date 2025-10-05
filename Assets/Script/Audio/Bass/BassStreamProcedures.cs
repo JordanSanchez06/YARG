@@ -20,21 +20,17 @@ namespace YARG.Audio.BASS
         [MonoPInvokeCallback(typeof(FileCloseProcedure))]
         private static void CloseCallback(IntPtr user)
         {
-            UnityEngine.Debug.Log("Fortnite 1 Start");
             var handle = GCHandle.FromIntPtr(user);
             var procedures = (BassStreamProcedures) handle.Target;
             procedures._stream.Close();
             handle.Free();
-            UnityEngine.Debug.Log("Fortnite 1 end");
         }
 
         [MonoPInvokeCallback(typeof(FileLengthProcedure))]
         private static long LengthCallback(IntPtr user)
         {
-            UnityEngine.Debug.Log("Fortnite 2 Start");
             var handle = GCHandle.FromIntPtr(user);
             var procedures = (BassStreamProcedures) handle.Target;
-            UnityEngine.Debug.Log("Fortnite 2 end");
             return procedures._length;
         }
 
@@ -43,18 +39,15 @@ namespace YARG.Audio.BASS
         {
             try
             {
-                UnityEngine.Debug.Log("Fortnite 3 start");
                 var handle = GCHandle.FromIntPtr(user);
                 var procedures = (BassStreamProcedures) handle.Target;
                 unsafe
                 {
-                    UnityEngine.Debug.Log("Fortnite 3 end");
                     return procedures._stream.Read(new Span<byte>((byte*) buffer, length));
                 }
             }
             catch
             {
-                UnityEngine.Debug.Log("Fortnite 3 catch");
                 return 0;
             }
         }
@@ -64,23 +57,19 @@ namespace YARG.Audio.BASS
         {
             try
             {
-                UnityEngine.Debug.Log("Fortnite 4 start");
                 var handle = GCHandle.FromIntPtr(user);
                 var procedures = (BassStreamProcedures) handle.Target;
                 procedures._stream.Seek(offset + procedures._start, SeekOrigin.Begin);
-                UnityEngine.Debug.Log("Fortnite 4 end");
                 return true;
             }
             catch
             {
-                UnityEngine.Debug.Log("Fortnite 4 catch");
                 return false;
             }
         }
 
         public BassStreamProcedures(Stream stream)
         {
-            UnityEngine.Debug.Log("Fortnite 5 start");
             _stream = stream;
             _start = stream.Position;
             _length = stream.Length - _start;
@@ -90,7 +79,6 @@ namespace YARG.Audio.BASS
             Length = LengthCallback;
             Read = ReadCallback;
             Seek = SeekCallback;
-            UnityEngine.Debug.Log("Fortnite 5 end");
         }
     }
 }

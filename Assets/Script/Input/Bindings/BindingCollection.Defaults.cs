@@ -24,7 +24,8 @@ namespace YARG.Input
                 ProGuitar guitar => SetDefaultBindings(guitar),
                 ProKeyboard keyboard => SetDefaultBindings(keyboard),
 
-                VirtualTouchpadDevice touchpad => SetDefaultBindings(touchpad),
+                VirtualStrumButtons virtualStrumButtons => SetDefaultBindings(virtualStrumButtons),
+                VirtualFretButtons virtualFretButtons => SetDefaultBindings(virtualFretButtons),
 
                 // Turntable turntable => SetDefaultBindings(turntable),
 
