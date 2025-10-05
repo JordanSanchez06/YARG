@@ -3,9 +3,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using System.Linq; // Required for the .OfType<T>() method
 
-public class VirtualDeviceManager : MonoBehaviour
+public class VirtualStrumBarDeviceManager : MonoBehaviour
 {
-    public static VirtualDeviceManager Instance { get; private set; }
+    public static VirtualStrumBarDeviceManager Instance { get; private set; }
     public VirtualTouchpadDevice Touchpad { get; private set; }
 
     private void Awake()
