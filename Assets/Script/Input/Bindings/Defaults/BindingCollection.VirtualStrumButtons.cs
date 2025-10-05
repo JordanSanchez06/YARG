@@ -5,13 +5,13 @@ namespace YARG.Input
 {
     public partial class BindingCollection
     {
-        public bool SetDefaultBindings(VirtualTouchpadDevice touchpad)
+        public bool SetDefaultBindings(VirtualStrumButtons touchpad)
         {
             // This method splits the logic: one for gameplay, one for menus.
             return IsMenu ? SetDefaultMenuBindings(touchpad) : SetDefaultGameplayBindings(touchpad);
         }
 
-        private bool SetDefaultGameplayBindings(VirtualTouchpadDevice touchpad)
+        private bool SetDefaultGameplayBindings(VirtualStrumButtons touchpad)
         {
             // Call the correct binding method based on the current instrument.
             // For now, we'll just handle guitar-like instruments.
@@ -23,7 +23,7 @@ namespace YARG.Input
             };
         }
 
-        private bool SetDefaultGuitarBindings_VirtualTouchpad(VirtualTouchpadDevice touchpad)
+        private bool SetDefaultGuitarBindings_VirtualTouchpad(VirtualStrumButtons touchpad)
         {
             if (Mode != GameMode.FiveFretGuitar && Mode != GameMode.SixFretGuitar)
                 return false;
@@ -41,7 +41,7 @@ namespace YARG.Input
             return true;
         }
 
-        private bool SetDefaultMenuBindings(VirtualTouchpadDevice touchpad)
+        private bool SetDefaultMenuBindings(VirtualStrumButtons touchpad)
         {
             if (!IsMenu)
                 return false;

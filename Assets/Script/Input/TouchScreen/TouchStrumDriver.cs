@@ -20,7 +20,7 @@ public class TouchStrumDriver : MonoBehaviour
 
     private GameObject touchStrumCanvas;
 
-    private VirtualTouchpadDevice touchpadDevice;
+    private VirtualStrumButtons touchpadDevice;
 
     private void Awake()
     {
@@ -63,7 +63,7 @@ public class TouchStrumDriver : MonoBehaviour
 
         foreach (var p in PlayerContainer.Players)
         {
-            if (p.Bindings.InputDevices.Any(device => device is VirtualTouchpadDevice))
+            if (p.Bindings.InputDevices.Any(device => device is VirtualStrumButtons))
             {
                 showControls = true;
                 break;
