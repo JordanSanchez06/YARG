@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using YARG.Player;
 
-public class TouchInputDriver : MonoBehaviour
+public class TouchStrumDriver : MonoBehaviour
 {
     [Header("UI Zones")]
     [SerializeField]
@@ -31,7 +31,7 @@ public class TouchInputDriver : MonoBehaviour
 
     private void OnEnable()
     {
-        touchpadDevice = VirtualDeviceManager.Instance?.Touchpad;
+        touchpadDevice = VirtualStrumBarDeviceManager.Instance?.Touchpad;
     }
 
 
@@ -40,7 +40,7 @@ public class TouchInputDriver : MonoBehaviour
         if (touchpadDevice == null)
         {
             // Keep trying to get the device if it wasn't ready during OnEnable
-            touchpadDevice = VirtualDeviceManager.Instance?.Touchpad;
+            touchpadDevice = VirtualStrumBarDeviceManager.Instance?.Touchpad;
             if (touchpadDevice == null) return;
         }
 
@@ -84,14 +84,26 @@ public class TouchInputDriver : MonoBehaviour
         if (RectTransformUtility.RectangleContainsScreenPoint(leftZone, touch.screenPosition, null))
         {
             activeTouches[touch.touchId] = TouchStartLocation.Left;
-            state.buttons |= 1 << 0;
+            state.buttons |= VirtualTouchpadState.LEFT_TAP_MASK;
             InputSystem.QueueStateEvent(touchpadDevice, state);
+
+            var resetState = new VirtualTouchpadState
+            {
+                buttons = 0
+            };
+            InputSystem.QueueStateEvent(touchpadDevice, resetState);
         }
         else if (RectTransformUtility.RectangleContainsScreenPoint(rightZone, touch.screenPosition, null))
         {
             activeTouches[touch.touchId] = TouchStartLocation.Right;
-            state.buttons |= 1 << 2;
+            state.buttons |= VirtualTouchpadState.RIGHT_TAP_MASK;
             InputSystem.QueueStateEvent(touchpadDevice, state);
+
+            var resetState = new VirtualTouchpadState
+            {
+                buttons = 0
+            };
+            InputSystem.QueueStateEvent(touchpadDevice, resetState);
         }
     }
 
@@ -103,13 +115,26 @@ public class TouchInputDriver : MonoBehaviour
 
             if (startLocation == TouchStartLocation.Left && RectTransformUtility.RectangleContainsScreenPoint(leftZone, touch.screenPosition, null))
             {
-                state.buttons |= 1 << 1;
+                state.buttons |= VirtualTouchpadState.LEFT_RELEASE_MASK;
                 InputSystem.QueueStateEvent(touchpadDevice, state);
+
+                var resetState = new VirtualTouchpadState
+                {
+                    buttons = 0
+                };
+                InputSystem.QueueStateEvent(touchpadDevice, resetState);
+
             }
             else if (startLocation == TouchStartLocation.Right && RectTransformUtility.RectangleContainsScreenPoint(rightZone, touch.screenPosition, null))
             {
-                state.buttons |= 1 << 3;
+                state.buttons |= VirtualTouchpadState.RIGHT_RELEASE_MASK;
                 InputSystem.QueueStateEvent(touchpadDevice, state);
+
+                var resetState = new VirtualTouchpadState
+                {
+                    buttons = 0
+                };
+                InputSystem.QueueStateEvent(touchpadDevice, resetState);
             }
 
             activeTouches.Remove(touch.touchId);
