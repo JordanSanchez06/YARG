@@ -33,7 +33,7 @@ Only new features I added were some onscreen buttons, they only show up in game 
 
 ## Building
 
-I should've documented things better but the main thing was compiling a dll for ManagedBass that uses static linking which are in the repo. Just make sure you set up your build settings to use them when building for IOS. Another was somewhere in YARG Core you can comment out a line that stops it from trying to initialize RTMIDI.dll I don't think this stopped the game from running though. Other than that it should just run, don't hesitate to send me a message on discord: yurdismelling if you have a question. I know I'm leaving out a lot.
+I should've documented things better but the main thing was compiling a dll for ManagedBass that uses static linking which are in the repo and should just work. You might need to make sure they are added properly in XCode. Just make sure you set up your build settings to use them when building for IOS. Another was somewhere in YARG Core you can comment out a line that stops it from trying to initialize RTMIDI.dll I don't think this stopped the game from running though. Other than that it should just run, don't hesitate to send me a message on discord: yurdismelling if you have a question. I know I'm leaving out a lot.
 
 ## wishlist
 Some things I'd like on the finished project if I ever continued this or someone else took over.
