@@ -53,7 +53,9 @@ namespace YARG.Helpers
         /// </summary>
         public static Resolution GetScreenResolution()
         {
-        #if UNITY_STANDALONE || UNITY_EDITOR
+#if UNITY_ANDROID
+            return Screen.currentResolution;
+#else
             var screenInfo = Screen.mainWindowDisplayInfo;
             return new Resolution()
             {
@@ -61,9 +63,7 @@ namespace YARG.Helpers
                 height = screenInfo.height,
                 refreshRate = (int) Math.Round(screenInfo.refreshRate.value),
             };
-        #else
-                    return Screen.currentResolution;
-        #endif
+#endif
         }
 
         /// <summary>
