@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using ManagedBass;
@@ -9,6 +9,11 @@ using YARG.Core.Logging;
 using YARG.Core.Song;
 using YARG.Helpers;
 using YARG.Settings;
+
+#if UNITY_ANDROID
+    using AOT;
+    using System.Runtime.InteropServices;
+#endif
 
 namespace YARG.Audio.BASS
 {
@@ -24,12 +29,34 @@ namespace YARG.Audio.BASS
         private float        _speed;
         private Timer        _whammySyncTimer;
 
+#if UNITY_ANDROID
+        private GCHandle _songEndGCHandle;
+
+        [MonoPInvokeCallback(typeof(SyncProcedure))]
+        private static void SongEndCallback(int handle, int channel, int data, IntPtr user)
+        {
+            var gcHandle = GCHandle.FromIntPtr(user);
+            if (gcHandle.Target is BassStemMixer mixer)
+            {
+                var end = mixer._songEnd;
+                if (end != null)
+                {
+                    UnityMainThreadCallback.QueueEvent(end.Invoke);
+                }
+            }
+        }
+#endif
+
         public override event Action SongEnd
         {
             add
             {
                 if (_songEndHandle == 0)
                 {
+#if UNITY_ANDROID
+                    _songEndGCHandle = GCHandle.Alloc(this);
+                    _songEndHandle = BassMix.ChannelSetSync(_mainHandle.Stream, SyncFlags.End, 0, SongEndCallback, GCHandle.ToIntPtr(_songEndGCHandle));
+#else
                     void sync(int _, int __, int ___, IntPtr _____)
                     {
                         // Prevent potential race conditions by caching the value as a local
@@ -40,6 +67,7 @@ namespace YARG.Audio.BASS
                         }
                     }
                     _songEndHandle = BassMix.ChannelSetSync(_mainHandle.Stream, SyncFlags.End, 0, sync);
+#endif
                 }
 
                 _songEnd += value;
@@ -338,6 +366,13 @@ namespace YARG.Audio.BASS
 
         protected override void DisposeUnmanagedResources()
         {
+#if UNITY_ANDROID
+            if (_songEndGCHandle.IsAllocated)
+            {
+                _songEndGCHandle.Free();
+            }
+#endif
+
             if (_mixerHandle != 0)
             {
                 if (!Bass.StreamFree(_mixerHandle))

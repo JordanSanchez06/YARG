@@ -272,6 +272,13 @@ namespace YARG.Settings
 
                 settingType.ForceInvokeCallback();
             }
+
+            #if UNITY_ANDROID
+                if (!Settings.SongFolders.Contains(Path.Combine(PathHelper.StreamingAssetsPath, "songs")))
+                {
+                    Settings.SongFolders.Add(Path.Combine(PathHelper.StreamingAssetsPath, "songs"));
+                }
+            #endif
         }
 
         public static void SaveSettings()
