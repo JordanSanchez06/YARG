@@ -1,8 +1,6 @@
-<p align="center">
-  <picture>
-    <img alt="YARG Gameplay" src="./Images/Banner.png" width="100%">
-  </picture>
-</p>
+https://github.com/user-attachments/assets/68db41a0-88f3-406d-964c-0013f448e1f4
+
+
 
 <p align="center">
     <i>YARG (a.k.a. Yet Another Rhythm Game)</i>
@@ -20,7 +18,41 @@
   </a>
 </p>
 
----
+
+# YARG on Android Please read:
+## First time you open the game the localization will not load aka text is weird. just restart when you get to the main menu. 
+### This is because it copies the streamingassets folder on the first time opening
+## songs go in /sdcard/Android/data/com.YARC.YARG/files/release/StreamingAssets/songs or something like that
+## To use the touch screen buttons just add them to your profile
+
+## Building
+- Code is in YARG-Android branch
+- set to ARM64
+- Vulkan
+- go through native bass plugins resolve conflict of it thinking linux ones are for android by excluding it in the inspector
+- Make sure it uses the managedbass dll in managedbassIL2cpp and not the original one. exlude android from that
+- make sure you're on my fork of YARG.core [YARG.core ](https://github.com/JordanSanchez06/YARG.Core/tree/mobile-compatibility) or just add the one change this just makes IL2CPP
+- I think thats it, just message me if not discord: yurdismelling
+
+
+# YARG on IOS (YARG:OT)?
+### Code is in Dev-IOS branch
+Just wanted to see if I could get it to run on Iphone because I wanted to make a magsafe peripheral that you can find here: https://makerworld.com/en/models/1901790-magsafe-guitar-hero-controller#profileId-2038327 Not perfect since it was my first 3d print design but I think it turned out pretty well. 
+
+## Features
+Only new features I added were some onscreen buttons, they only show up in game if you added them to your profile. The fret buttons are self explanatory but the strum buttons are for using a peripheral like the one I created. The left button is an alternate strum so it strums on press and release. The right one only strums on press. 
+
+## Building
+
+I should've documented things better but the main thing was compiling a dll for ManagedBass that uses static linking which are in the repo and should just work. You might need to make sure they are added properly in XCode. Just make sure you set up your build settings to use them when building for IOS. Another was somewhere in YARG Core you can comment out a line that stops it from trying to initialize RTMIDI.dll I don't think this stopped the game from running though. Other than that it should just run, don't hesitate to send me a message on discord: yurdismelling if you have a question. I know I'm leaving out a lot.
+
+## wishlist for YARG IOS
+### Some things I'd like on the finished project if I ever continued this or someone else took over.
+- The main one is YARN and official setlist integration. A screen where you can download Yarg songs over the internet like how you would on the pc launcher.
+  - For this song-download feature, I want a hidden way to change the endpoint URL so users can serve songs from their PC (localhost). This isn't for piracy — it's for charters to test their songs on iOS. It probably wouldn't be App Store–approved if exposed as an easy-to-access setting. My idea: allow importing the PC YARG settings JSON; if you add a line at the end like "YARGEndpointURL": "localhost:1111" it will change the endpoint, and then you can use a tool to host your songs.
+    - If you doubt this would be approved, look into an app called Stremio. This app normally lets you host custom content through addons which get tied to your account. You cannot add these addons on the IOS version, but if you already have them tied to your account, it will carry over.
+- The library Yarg forked for MIDI does support IOS on later versions. It would be really cool to be able to have your ipad attached to your midi drumset and play that way. It would probably be one of the coolest drum tools.
+
 
 YARG (a.k.a. Yet Another Rhythm Game) is a free, open-source, plastic guitar game that is still in development. It supports guitar (five fret), drums (plastic or e-kit), vocals, pro-guitar, and more! YARG is still in active development, so there may be bugs and missing features.
 
@@ -85,14 +117,6 @@ There are some dependencies that will be needed in order for HID devices (such a
   - The file name may differ if desired, but it must come before `73-seat-late.rules`!
 3. Reboot your system to apply the new udev rule, then you should be all good to go!
 
-For improved compatibility when using the XBOX 360 Wireless Adapter with Linux, create a new udev rules file called `99-yarg-libusb.rules` inside of `/etc/udev/rules.d/` or `/usr/lib/udev/rules.d/`, with the following contents:
-
-```
-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="0291", MODE="0666"
-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="02a9", MODE="0666"
-SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="0719", MODE="0666"
-```
-
 ## 🔨 Building/Contributing
 
 > [!IMPORTANT]
@@ -122,7 +146,7 @@ SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="0719", MODE="0666"
       - the main repository's URL (`https://github.com/YARC-Official/YARG`) if you just want to build the game.
       - A complete example using the main repository's URL is `git clone -b dev --recursive https://github.com/YARC-Official/YARG.git`.
    6. Because YARG contains submodules, you may need to do `git submodule update` when things get updated.
-4. Install Unity 2021.3.45f2. Easiest method will be using Unity Hub:
+4. Install Unity 2021.3.36f1. Easiest method will be using Unity Hub:
    1. Download and install [Unity Hub](https://unity.com/download).
    2. Sign-in/create an account with a personal license (free).
    3. In Unity Hub, hit the arrow next to Add and select `Add project from disk`, then select the folder you cloned YARG to.
@@ -222,8 +246,6 @@ Some libraries/assets are **packaged** with the source code have licenses that m
 | [PolyHaven](https://polyhaven.com/) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 | [BASS](https://www.un4seen.com/) | [Proprietary](https://www.un4seen.com/) (free for non-commercial use)
 | [Haukcode.sACN](https://github.com/HakanL/Haukcode.sACN) | [MIT](https://github.com/HakanL/Haukcode.sACN/blob/master/LICENSE) |
-| [aperitif chatter.wav by soundslikewillem](https://freesound.org/s/449550/)|[Attribution NonCommercial 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
-| [Crowd after Encore.wav by soundslikewillem](https://freesound.org/s/193064/)|[Attribution NonCommercial 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
 
 Please note that other libraries are **not** directly packaged within the source code, and are to be installed by NuGet, Unity's packaged manager, or via a Git submodule.
 
@@ -247,7 +269,6 @@ These are assets that are installed by NuGet, Unity's packaged manager, or via a
 | [SoftMaskForUGUI](https://github.com/mob-sakai/SoftMaskForUGUI) | Library | UI Utility
 | [Unity-Dependencies-Hunter](https://github.com/AlexeyPerov/Unity-Dependencies-Hunter) | Library | Unity Editor Utility
 | [tmpro-dynamic-data-cleaner](https://github.com/STARasGAMES/tmpro-dynamic-data-cleaner) | Library | Prevent Git Change Spam
-| [openvat-unity](https://github.com/sharpen3d/openvat-unity.git) | Library | OpenVAT (Vertex Animated Textures) Support
 
 ## 💸 Donate
 
