@@ -18,7 +18,21 @@ https://github.com/user-attachments/assets/68db41a0-88f3-406d-964c-0013f448e1f4
   </a>
 </p>
 
----
+
+# YARG on Android Please read:
+## First time you open the game the localization will not load aka text is weird. just restart when you get to the main menu. 
+### This is because it copies the streamingassets folder on the first time opening
+## songs go in /sdcard/Android/data/com.YARC.YARG/files/release/StreamingAssets/songs or something like that
+## To use the touch screen buttons just add them to your profile
+
+## Building
+- set to ARM64
+- Vulkan
+- go through native bass plugins resolve conflict of it thinking linux ones are for android by excluding it in the inspector
+- Make sure it uses the managedbass dll in managedbassIL2cpp and not the original one. exlude android from that
+- make sure you're on my fork of YARG.core [YARG.core ](https://github.com/JordanSanchez06/YARG.Core/tree/mobile-compatibility) or just add the one change this just makes IL2CPP
+- I think thats it, just message me if not discord: yurdismelling
+
 
 # YARG on IOS (YARG:OT)?
 ### Code is in Dev-IOS branch
