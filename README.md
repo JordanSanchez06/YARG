@@ -26,6 +26,7 @@ https://github.com/user-attachments/assets/68db41a0-88f3-406d-964c-0013f448e1f4
 ## To use the touch screen buttons just add them to your profile
 
 ## Building
+- Code is in YARG-Android branch
 - set to ARM64
 - Vulkan
 - go through native bass plugins resolve conflict of it thinking linux ones are for android by excluding it in the inspector
