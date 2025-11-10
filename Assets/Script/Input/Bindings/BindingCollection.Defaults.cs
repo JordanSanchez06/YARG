@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using PlasticBand.Devices;
 using UnityEngine.InputSystem;
 
@@ -23,6 +23,9 @@ namespace YARG.Input
 
                 ProGuitar guitar => SetDefaultBindings(guitar),
                 ProKeyboard keyboard => SetDefaultBindings(keyboard),
+
+                VirtualStrumButtons virtualStrumButtons => SetDefaultBindings(virtualStrumButtons),
+                VirtualFretButtons virtualFretButtons => SetDefaultBindings(virtualFretButtons),
 
                 // Turntable turntable => SetDefaultBindings(turntable),
 

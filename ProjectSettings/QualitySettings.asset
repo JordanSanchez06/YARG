@@ -27,6 +27,7 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     vSyncCount: 0
+    realtimeGICPUUsage: 25
     lodBias: 0.4
     maximumLODLevel: 0
     streamingMipmapsActive: 0
@@ -42,7 +43,10 @@ QualitySettings:
     resolutionScalingFixedDPIFactor: 1
     customRenderPipeline: {fileID: 11400000, guid: 29334e78a9b36b244a7eab7eeeb8ab2a,
       type: 2}
-    excludedTargetPlatforms: []
+    excludedTargetPlatforms:
+    - Standalone
+    - Server
+    - Windows Store Apps
   - serializedVersion: 2
     name: High
     pixelLightCount: 2
@@ -64,6 +68,7 @@ QualitySettings:
     realtimeReflectionProbes: 1
     billboardsFaceCameraPosition: 1
     vSyncCount: 0
+    realtimeGICPUUsage: 25
     lodBias: 2
     maximumLODLevel: 0
     streamingMipmapsActive: 0
@@ -82,18 +87,18 @@ QualitySettings:
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
     Android: 0
-    CloudRendering: 1
-    GameCoreScarlett: 1
-    GameCoreXboxOne: 1
-    Lumin: 1
-    Nintendo Switch: 1
-    PS4: 1
-    PS5: 1
-    Server: 1
-    Stadia: 1
-    Standalone: 1
+    CloudRendering: 0
+    GameCoreScarlett: 0
+    GameCoreXboxOne: 0
+    Lumin: 0
+    Nintendo Switch: 0
+    PS4: 0
+    PS5: 0
+    Server: 0
+    Stadia: 0
+    Standalone: 0
     WebGL: 0
-    Windows Store Apps: 1
-    XboxOne: 1
+    Windows Store Apps: 0
+    XboxOne: 0
     iPhone: 0
     tvOS: 0

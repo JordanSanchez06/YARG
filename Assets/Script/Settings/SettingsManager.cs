@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -272,6 +273,53 @@ namespace YARG.Settings
 
                 settingType.ForceInvokeCallback();
             }
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+            // Prompt for permission if we don't have it
+            if (!StoragePermissionHelper.HasAllFilesAccess())
+            {
+                UnityEngine.Debug.Log("Requesting all-files access permission...");
+                StoragePermissionHelper.PromptAllFilesAccess();
+            }
+            else
+            {
+                UnityEngine.Debug.Log("All-files access already granted.");
+            }
+
+            // Internal storage root (everything before "/Android")
+            if (StoragePermissionHelper.HasAllFilesAccess())
+            {
+                string internalRoot = PathHelper.PersistentDataPath;
+                int androidIndex = internalRoot.IndexOf("/Android/");
+                if (androidIndex > 0)
+                    internalRoot = internalRoot.Substring(0, androidIndex);
+
+                string internalSongs = Path.Combine(internalRoot, "YARG/songs");
+                UnityEngine.Debug.Log("Internal storage path: " + internalSongs);
+                if (!Settings.SongFolders.Contains(internalSongs))
+                {
+                    Settings.SongFolders.Add(internalSongs);
+                }
+
+                // SD card
+                string sdRoot = AndroidPathHelper.GetSdCardRoot();
+                if (!string.IsNullOrEmpty(sdRoot))
+                {
+                    string sdSongs = Path.Combine(sdRoot, "YARG/songs");
+                    UnityEngine.Debug.Log("SD card path: " + sdSongs);
+                    if (!Settings.SongFolders.Contains(sdSongs))
+                        Settings.SongFolders.Add(sdSongs);
+                }
+            }
+
+            //sandboxed streamingasset path
+            if (!Settings.SongFolders.Contains(Path.Combine(PathHelper.StreamingAssetsPath, "songs")))
+            {
+            Settings.SongFolders.Add(Path.Combine(PathHelper.StreamingAssetsPath, "songs"));
+            }
+#endif
+
+
         }
 
         public static void SaveSettings()

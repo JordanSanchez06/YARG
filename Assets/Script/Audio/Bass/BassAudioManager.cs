@@ -8,6 +8,7 @@ using UnityEngine;
 using YARG.Core.Audio;
 using YARG.Core.Logging;
 using YARG.Settings;
+using System.Runtime.InteropServices;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -420,15 +421,33 @@ namespace YARG.Audio.BASS
             // Last flag is new BASS_SAMPLE_NOREORDER flag, which is not in the BassFlags enum,
             // as it was made as part of an update to fix <= 8 channel oggs.
             // https://www.un4seen.com/forum/?topic=20148.msg140872#msg140872
+
             const BassFlags streamFlags = BassFlags.Prescan | BassFlags.Decode | BassFlags.AsyncFile | (BassFlags) 64;
 
+#if UNITY_ANDROID
+                // This is the special GCHandle code that is required for a real mobile build.
+                // It safely "pins" the C# object in memory so the native code can access it.
+                var procs = new BassStreamProcedures(stream);
+                var handle = GCHandle.Alloc(procs);
+                UnityEngine.Debug.Log("fortnite bass 1");
+                streamHandle = Bass.CreateStream(StreamSystem.NoBuffer, streamFlags, procs, GCHandle.ToIntPtr(handle));
+                UnityEngine.Debug.Log("fortnite bass 2");
+                if (streamHandle == 0)
+                {
+                    YargLogger.LogFormatError("Failed to create source stream: {0}!", Bass.LastError);
+                    handle.Free(); // Free the handle if the stream creation fails
+                    return false;
+                }
+                return true;
+#else
             streamHandle = Bass.CreateStream(StreamSystem.NoBuffer, streamFlags, new BassStreamProcedures(stream));
-            if (streamHandle == 0)
-            {
-                YargLogger.LogFormatError("Failed to create source stream: {0}!", Bass.LastError);
-                return false;
-            }
-            return true;
+                if (streamHandle == 0)
+                {
+                    YargLogger.LogFormatError("Failed to create source stream: {0}!", Bass.LastError);
+                    return false;
+                }
+                return true;
+            #endif
         }
 
         internal static bool GetSpeed(int streamHandle, out float speed)

@@ -119,7 +119,11 @@ namespace YARG.Helpers
             // Get other paths that are only allowed on the main thread
             ApplicationDataPath = SanitizePath(Application.dataPath);
             ExecutablePath = Directory.GetParent(ApplicationDataPath)?.FullName;
-            StreamingAssetsPath = SanitizePath(Application.streamingAssetsPath);
+            #if UNITY_ANDROID
+                StreamingAssetsPath = SanitizePath(Path.Combine(PersistentDataPath, "StreamingAssets"));
+            #else
+                StreamingAssetsPath = SanitizePath(UnityEngine.Application.streamingAssetsPath);
+            #endif
 
             // Get song scanning paths
             SongCachePath = Path.Combine(PersistentDataPath, "songcache.bin");
