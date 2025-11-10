@@ -28,13 +28,13 @@ namespace YARG.Input
             if (Mode != GameMode.FiveFretGuitar && Mode != GameMode.SixFretGuitar)
                 return false;
 
-            // Left side acts as an single-strum  (strum down on tap only)
+            // Left side acts as an alt-strum (strum down on tap, strum up on release)
             AddBinding(GuitarAction.StrumDown, touchpad.LeftTap);
-
-
-            // Right side acts as a alt-strum (strum down on tap, strum up on release)
-            AddBinding(GuitarAction.StrumDown, touchpad.RightTap);
             AddBinding(GuitarAction.StrumUp, touchpad.RightRelease);
+
+            // Right side acts as a single-strum  (strum down on tap only)
+            AddBinding(GuitarAction.StrumDown, touchpad.RightTap);
+            //AddBinding(GuitarAction.StrumUp, touchpad.RightRelease);
 
             return true;
         }
