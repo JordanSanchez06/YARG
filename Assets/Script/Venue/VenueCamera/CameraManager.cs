@@ -112,6 +112,8 @@ namespace YARG.Venue.VenueCamera
         private List<Camera> _frontCameras = new();
         private List<Camera> _behindCameras = new();
 
+        private bool _useCameraTimer;
+
         private float _cameraTimer;
         private int   _cameraIndex;
         private bool  _volumeSet;
@@ -205,7 +207,9 @@ namespace YARG.Venue.VenueCamera
             InitializePostProcessing();
             InitializeVolume();
 
-            SwitchCamera(_currentCamera, _cameraCuts.Count < 1);
+            _useCameraTimer = _cameraCuts.Count < 1;
+
+            SwitchCamera(_currentCamera, _useCameraTimer);
 
             GameManager.SetVenueCameraManager(this);
         }
@@ -255,12 +259,17 @@ namespace YARG.Venue.VenueCamera
             while (_currentCutIndex < _cameraCuts.Count && _cameraCuts[_currentCutIndex].Time <= GameManager.VisualTime)
             {
                 var cut = _cameraCuts[_currentCutIndex];
-                if (GameManager.VisualTime >= cut.Time && GameManager.VisualTime <= cut.TimeEnd)
+                if (GameManager.VisualTime >= cut.Time) // && GameManager.VisualTime <= cut.TimeEnd)
                 {
                     SwitchCamera(MapSubjectToValidCamera(cut));
                 }
 
                 _currentCutIndex++;
+            }
+
+            if (!_useCameraTimer)
+            {
+                return;
             }
 
             // Update the camera timer

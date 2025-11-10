@@ -1,4 +1,4 @@
-#define MAX_MATRICES 128
+#define MAX_MATRICES 32
 uniform int _YargHighwaysN;
 uniform float4x4 _YargCamViewMatrices[MAX_MATRICES];
 uniform float4x4 _YargCamInvViewMatrices[MAX_MATRICES];
