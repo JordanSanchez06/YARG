@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +13,9 @@ using YARG.Menu.Navigation;
 using YARG.Menu.Persistent;
 using YARG.Player;
 using YARG.Settings;
+#if UNITY_ANDROID
+using YARG.Helpers;
+#endif 
 
 namespace YARG.Menu.Calibrator
 {
@@ -137,7 +140,11 @@ namespace YARG.Menu.Calibrator
 
                     const float SPEED = 1f;
                     const double VOLUME = 1.0;
+#if UNITY_ANDROID
+                    var file = Path.Combine(PathHelper.StreamingAssetsPath, "calibration_music.ogg");
+#else
                     var file = Path.Combine(Application.streamingAssetsPath, "calibration_music.ogg");
+#endif
                     _mixer = GlobalAudioHandler.LoadCustomFile(file, SPEED, VOLUME);
                     _mixer.SongEnd += OnAudioEnd;
                     _mixer.Play(true);
