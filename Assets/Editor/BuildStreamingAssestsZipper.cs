@@ -12,7 +12,7 @@ using CompressionLevel = System.IO.Compression.CompressionLevel;
 
 public class BuildStreamingAssetsZipper : IPostprocessBuildWithReport
 {
-    public int callbackOrder => 0;
+    public int callbackOrder => 999;
 
     public void OnPostprocessBuild(BuildReport report)
     {
